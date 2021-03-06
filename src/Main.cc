@@ -1,10 +1,22 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <time.h>
 #include "../include/Dados.hpp"
 #include "../include/QuickSort.hpp"
 #include "../include/InsertionSort.hpp"
 #include "../include/MergeSort.hpp"
+
+void imprimirConjunto(Dados *conjunto, int tamanho, clock_t execTime, std::string algoType)
+{
+    std::cout << "=================================" << std::endl;
+    std::cout << algoType << ":" << std::endl;
+    // for (int i = 0; i < tamanho; i++)
+    // {
+    // std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
+    // }
+    std::cout << "Execution time: " << ((double)execTime) / ((CLOCKS_PER_SEC / 1000)) << "ms" << std::endl; //conversão para double
+}
 
 int main(int argc, char *argv[])
 {
@@ -31,34 +43,28 @@ int main(int argc, char *argv[])
         i--;
     }
 
-    for (int i = 0; i < linhasParaLer; i++)
-    {
-        std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
-    }
-
-    std::cout << "=================================" << std::endl;
     QuickSort sorter = QuickSort(conjunto, linhasParaLer);
-    Dados *aux = sorter.sort();
-    std::cout << "Quicksorted:" << std::endl;
-    for (int i = 0; i < linhasParaLer; i++)
-    {
-        std::cout << aux[i].nome << ", " << aux[i].distancia << std::endl;
-    }
-    std::cout << "=================================" << std::endl;
-    std::cout << "Insertsorted: " << std::endl;
+    Dados *auxQuickIterativo;
+    clock_t execTimeQuickIterativo;
+    std::tie(auxQuickIterativo, execTimeQuickIterativo) = sorter.sort("iterativo");
+    imprimirConjunto(auxQuickIterativo, linhasParaLer, execTimeQuickIterativo, "Quicksort iterativo");
+
+    Dados *auxQuickRecursivo;
+    clock_t execTimeQuickRecursivo;
+    std::tie(auxQuickRecursivo, execTimeQuickRecursivo) = sorter.sort("recursivo");
+    imprimirConjunto(auxQuickRecursivo, linhasParaLer, execTimeQuickRecursivo, "Quicksort recursivo");
+
     InsertionSort inSorter = InsertionSort(conjunto, linhasParaLer);
-    Dados *auxIns = inSorter.sort();
-        for (int i = 0; i < linhasParaLer; i++)
-    {
-        std::cout << auxIns[i].nome << ", " << auxIns[i].distancia << std::endl;
-    }    
-    std::cout << "=================================" << std::endl;
-    std::cout << "Mergesorted: " << std::endl;
+    Dados *auxIns;
+    clock_t execTimeInsertion;
+    std::tie(auxIns, execTimeInsertion) = inSorter.sort();
+    imprimirConjunto(auxIns, linhasParaLer, execTimeInsertion, "InsertionSort");
+
     MergeSort mergSorter = MergeSort(conjunto, linhasParaLer);
-    Dados *auxMer = mergSorter.sort();
-        for (int i = 0; i < linhasParaLer; i++)
-    {
-        std::cout << auxMer[i].nome << ", " << auxMer[i].distancia << std::endl;
-    }
+    Dados *auxMergeSort;
+    clock_t execTimeMerge;
+    std::tie(auxMergeSort, execTimeMerge) = mergSorter.sort();
+    imprimirConjunto(auxMergeSort, linhasParaLer, execTimeMerge, "MergeSort");
+
     return 0;
 }

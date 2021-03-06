@@ -7,10 +7,12 @@ MergeSort::MergeSort(Dados *conjunto, int size)
     this->size = size;
 }
 
-Dados *MergeSort::sort()
+std::tuple<Dados *, clock_t>MergeSort::sort()
 {
+    clock_t time = clock();
     this->mergeSort(this->conjuntoClasse, 0, this->size - 1);
-    return this->conjuntoClasse;
+    time = clock() - time;
+    return {this->conjuntoClasse, time};
 }
 
 // Merges two subarrays of arr[].

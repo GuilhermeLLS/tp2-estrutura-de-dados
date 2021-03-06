@@ -7,10 +7,12 @@ InsertionSort::InsertionSort(Dados *conjunto, int size)
     this->size = size;
 }
 
-Dados *InsertionSort::sort()
+std::tuple<Dados *, clock_t> InsertionSort::sort()
 {
+    clock_t time = clock();
     this->insertionSort(this->conjuntoClasse, this->size);
-    return this->conjuntoClasse;
+    time = clock() - time;
+    return {this->conjuntoClasse, time};
 }
 
 void InsertionSort::insertionSort(Dados *conjunto, int size)

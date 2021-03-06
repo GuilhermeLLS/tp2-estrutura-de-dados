@@ -2,13 +2,15 @@
 #define MERGESORT_HPP
 
 #include <iostream>
+#include <time.h>
+#include <tuple>
 #include "Dados.hpp"
 
 class MergeSort
 {
 public:
     MergeSort(Dados *conjunto, int size);
-    Dados *sort();
+    std::tuple<Dados *, clock_t> sort();
 
 protected:
     void merge(Dados *conjunto, int left, int middle, int right);
