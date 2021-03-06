@@ -15,7 +15,7 @@ void imprimirConjunto(Dados *conjunto, int tamanho, clock_t execTime, std::strin
     // {
     // std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
     // }
-    std::cout << "Execution time: " << ((double)execTime) / ((CLOCKS_PER_SEC / 1000)) << "ms" << std::endl; //conversão para double
+    std::cout << "Execution time: " << ((double)execTime) / ((CLOCKS_PER_SEC / 1000)) << "ms" << std::endl;
 }
 
 int main(int argc, char *argv[])

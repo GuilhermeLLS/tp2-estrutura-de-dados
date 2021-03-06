@@ -18,6 +18,9 @@ protected:
 private:
     Dados *conjuntoClasse;
     int size;
+
+friend class TimSort;
 };
+
 
 #endif
