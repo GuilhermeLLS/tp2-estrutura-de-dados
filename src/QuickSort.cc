@@ -1,51 +1,47 @@
-/* C implementation QuickSort */
 #include "../include/Dados.hpp"
 #include "../include/QuickSort.hpp"
 
-QuickSort::QuickSort(Dados conjunto[])
+QuickSort::QuickSort(Dados conjunto[], int size)
 {
     this->conjuntoClasse = conjunto;
+    this->size = size;
 }
 
 Dados *QuickSort::sort()
 {
-    int n = sizeof(this->conjuntoClasse) / sizeof(this->conjuntoClasse[0]);
-    std::cout << n << std::endl;
-    quickSort(this->conjuntoClasse, 0, 49);
+    this->quickSort(this->conjuntoClasse, 0, this->size - 1);
     return this->conjuntoClasse;
-}
-
-void QuickSort::swap(Dados *a, Dados *b)
-{
-    Dados aux = *a;
-    *a = *b;
-    *b = aux;
 }
 
 int QuickSort::partition(Dados *conjunto, int low, int high)
 {
+    Dados aux;
     Dados pivo = conjunto[high];
-    int indiceMenor = low - 1;
+    int indiceMenor = low;
 
-    for (int i = low; i <= high; i++)
+    for (int i = low; i < high; i++)
     {
         if (conjunto[i].distancia <= pivo.distancia)
         {
+            aux = conjunto[i];
+            conjunto[i] = conjunto[indiceMenor];
+            conjunto[indiceMenor] = aux;
             indiceMenor++;
-            this->swap(&conjunto[indiceMenor], &conjunto[i]);
         }
     }
-    this->swap(&conjunto[indiceMenor + 1], &conjunto[high]);
-    return indiceMenor + 1;
+
+    aux = conjunto[high];
+    conjunto[high] = conjunto[indiceMenor];
+    conjunto[indiceMenor] = aux;
+
+    return indiceMenor;
 }
 
 void QuickSort::quickSort(Dados *conjunto, int low, int high)
 {
-    std::cout << "entrei " << low << "," << high << std::endl;
     if (low < high)
     {
         int indiceParticionamento = this->partition(conjunto, low, high);
-        std::cout << indiceParticionamento << std::endl;
         this->quickSort(conjunto, low, indiceParticionamento - 1);
         this->quickSort(conjunto, indiceParticionamento + 1, high);
     }

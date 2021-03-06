@@ -7,16 +7,16 @@
 class QuickSort
 {
 public:
-    QuickSort(Dados conjunto[]);
+    QuickSort(Dados conjunto[], int size);
     Dados *sort();
 
 protected:
-    void swap(Dados *a, Dados *b);
     int partition(Dados conjunto[], int low, int high);
     void quickSort(Dados conjunto[], int low, int high);
 
 private:
     Dados *conjuntoClasse;
+    int size;
 };
 
 #endif

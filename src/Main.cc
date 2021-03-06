@@ -1,9 +1,10 @@
-#include "Test.h"
 #include <fstream>
 #include <string>
 #include <iostream>
 #include "../include/Dados.hpp"
 #include "../include/QuickSort.hpp"
+#include "../include/InsertionSort.hpp"
+#include "../include/MergeSort.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +13,8 @@ int main(int argc, char *argv[])
 
     Dados conjunto[linhasParaLer];
     std::ifstream dadosInput(nomeArquivo);
-    while (linhasParaLer > 0)
+    int i = linhasParaLer;
+    while (i > 0)
     {
         std::string line;
         getline(dadosInput, line);
@@ -22,26 +24,41 @@ int main(int argc, char *argv[])
         while ((pos = line.find(delimiter)) != std::string::npos)
         {
             token = line.substr(0, pos);
-            conjunto[linhasParaLer - 1].nome = token;
+            conjunto[i - 1].nome = token;
             line.erase(0, pos + delimiter.length());
         }
-        conjunto[linhasParaLer - 1].distancia = stoi(line);
-        linhasParaLer--;
+        conjunto[i - 1].distancia = stoi(line);
+        i--;
     }
 
-    // for (int i = 0; i < 50; i++)
-    // {
-        // std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
-    // }
+    for (int i = 0; i < linhasParaLer; i++)
+    {
+        std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
+    }
 
     std::cout << "=================================" << std::endl;
-    QuickSort sorter = QuickSort(conjunto);
+    QuickSort sorter = QuickSort(conjunto, linhasParaLer);
     Dados *aux = sorter.sort();
-
-    for (int i = 0; i < 50; i++)
+    std::cout << "Quicksorted:" << std::endl;
+    for (int i = 0; i < linhasParaLer; i++)
     {
         std::cout << aux[i].nome << ", " << aux[i].distancia << std::endl;
     }
-
+    std::cout << "=================================" << std::endl;
+    std::cout << "Insertsorted: " << std::endl;
+    InsertionSort inSorter = InsertionSort(conjunto, linhasParaLer);
+    Dados *auxIns = inSorter.sort();
+        for (int i = 0; i < linhasParaLer; i++)
+    {
+        std::cout << auxIns[i].nome << ", " << auxIns[i].distancia << std::endl;
+    }    
+    std::cout << "=================================" << std::endl;
+    std::cout << "Mergesorted: " << std::endl;
+    MergeSort mergSorter = MergeSort(conjunto, linhasParaLer);
+    Dados *auxMer = mergSorter.sort();
+        for (int i = 0; i < linhasParaLer; i++)
+    {
+        std::cout << auxMer[i].nome << ", " << auxMer[i].distancia << std::endl;
+    }
     return 0;
 }
