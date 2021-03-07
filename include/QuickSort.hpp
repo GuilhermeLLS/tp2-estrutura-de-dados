@@ -13,7 +13,7 @@ public:
     std::tuple<Dados *, clock_t> sort(std::string tipo);
 
 protected:
-    int achaPivo(Dados *conjunto, int esquerda, int direita, std::string tipo);
+    int achaPivo(Dados *conjunto, int esquerda, int direita);
     void partition(Dados *conjunto, int esquerda, int direita, int *i, int *j);
     void partitionMediana(Dados *conjunto, int esquerda, int direita, int *i, int *j);
     void quickSort(Dados *conjunto, int esquerda, int direita);

@@ -56,25 +56,32 @@ void QuickSort::partition(Dados *conjunto, int esquerda, int direita, int *indic
     };
 }
 
-int QuickSort::achaPivo(Dados *conjunto, int esq, int dir, std::string tipo)
+void QuickSort::quickSort(Dados *dados, int esquerda, int direita)
 {
-    if (tipo == "pivo_meio")
+    int i, j;
+    partition(dados, esquerda, direita, &i, &j);
+    if (esquerda < j)
     {
-        return (esq + dir) / 2;
+        quickSort(dados, esquerda, j);
     }
-    if (tipo == "pivo_mediana")
+    if (i < direita)
     {
-        Dados elemEsq = conjunto[esq];
-        Dados elemMeio = conjunto[(esq + dir) / 2];
-        Dados elemDir = conjunto[dir];
+        quickSort(dados, i, direita);
+    }
+}
 
-        if ((elemMeio.distancia < elemDir.distancia && elemMeio.distancia > elemEsq.distancia) || (elemMeio.distancia > elemDir.distancia && elemMeio.distancia < elemEsq.distancia))
-            return (esq + dir) / 2;
-        if ((elemEsq.distancia < elemMeio.distancia && elemEsq.distancia > elemDir.distancia) || (elemEsq.distancia > elemMeio.distancia && elemEsq.distancia < elemDir.distancia))
-            return esq;
-        if ((elemDir.distancia > elemMeio.distancia && elemDir.distancia < elemEsq.distancia) || (elemDir.distancia < elemMeio.distancia && elemDir.distancia > elemEsq.distancia))
-            return dir;
-    }
+int QuickSort::achaPivo(Dados *conjunto, int esq, int dir)
+{
+    Dados elemEsq = conjunto[esq];
+    Dados elemMeio = conjunto[(esq + dir) / 2];
+    Dados elemDir = conjunto[dir];
+
+    if ((elemMeio.distancia < elemDir.distancia && elemMeio.distancia > elemEsq.distancia) || (elemMeio.distancia > elemDir.distancia && elemMeio.distancia < elemEsq.distancia))
+        return (esq + dir) / 2;
+    if ((elemEsq.distancia < elemMeio.distancia && elemEsq.distancia > elemDir.distancia) || (elemEsq.distancia > elemMeio.distancia && elemEsq.distancia < elemDir.distancia))
+        return esq;
+    if ((elemDir.distancia > elemMeio.distancia && elemDir.distancia < elemEsq.distancia) || (elemDir.distancia < elemMeio.distancia && elemDir.distancia > elemEsq.distancia))
+        return dir;
     return (esq + dir) / 2;
 }
 
@@ -83,7 +90,7 @@ void QuickSort::partitionMediana(Dados *conjunto, int esquerda, int direita, int
     Dados pivo, aux;
     *indiceEsquerda = esquerda;
     *indiceDireita = direita;
-    pivo = conjunto[achaPivo(conjunto, esquerda, direita, "pivo_mediana")];
+    pivo = conjunto[achaPivo(conjunto, esquerda, direita)];
     while (*indiceEsquerda <= *indiceDireita)
     {
         while (pivo.distancia > conjunto[*indiceEsquerda].distancia)
@@ -116,19 +123,5 @@ void QuickSort::quickSortMediana(Dados *dados, int esquerda, int direita)
     if (i < direita)
     {
         quickSortMediana(dados, i, direita);
-    }
-}
-
-void QuickSort::quickSort(Dados *dados, int esquerda, int direita)
-{
-    int i, j;
-    partition(dados, esquerda, direita, &i, &j);
-    if (esquerda < j)
-    {
-        quickSort(dados, esquerda, j);
-    }
-    if (i < direita)
-    {
-        quickSort(dados, i, direita);
     }
 }
