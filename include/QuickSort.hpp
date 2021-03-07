@@ -13,11 +13,11 @@ public:
     std::tuple<Dados *, clock_t> sort(std::string tipo);
 
 protected:
-    void troca(Dados *troca1, Dados *troca2);
-    void partitionRecursive(Dados *conjunto, int esquerda, int direita, int *i, int *j);
-    int partitionIterative(Dados *conjunto, int esquerda, int direita);
-    void quickSortRecursive(Dados *conjunto, int esquerda, int direita);
-    void quickSortIterative(Dados *conjunto, int esquerda, int direita);
+    int achaPivo(Dados *conjunto, int esquerda, int direita, std::string tipo);
+    void partition(Dados *conjunto, int esquerda, int direita, int *i, int *j);
+    void partitionMediana(Dados *conjunto, int esquerda, int direita, int *i, int *j);
+    void quickSort(Dados *conjunto, int esquerda, int direita);
+    void quickSortMediana(Dados *conjunto, int esquerda, int direita);
 
 private:
     Dados *conjuntoClasse;

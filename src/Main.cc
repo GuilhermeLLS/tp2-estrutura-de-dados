@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
     }
 
     std::string escolha;
-    std::cout << "0- QuickSort Iterativo\n"
-              << "1- QuickSort Recursivo\n"
+    std::cout << "0- QuickSort Pivo Meio\n"
+              << "1- QuickSort Pivo Mediana\n"
               << "2- InsertionSort\n"
               << "3- MergeSort\n"
               << "4- TimSort\n"
@@ -60,21 +60,21 @@ int main(int argc, char *argv[])
     case 0:
     {
         QuickSort *sorter = new QuickSort(conjunto, linhasParaLer);
-        Dados *auxQuickIterativo;
-        clock_t execTimeQuickIterativo;
-        std::tie(auxQuickIterativo, execTimeQuickIterativo) = sorter->sort("iterativo");
-        imprimirConjunto(auxQuickIterativo, linhasParaLer, execTimeQuickIterativo, "Quicksort iterativo");
+        Dados *auxQuickMeio;
+        clock_t execTimeQuickPivoMeio;
+        std::tie(auxQuickMeio, execTimeQuickPivoMeio) = sorter->sort("pivo_meio");
+        imprimirConjunto(auxQuickMeio, linhasParaLer, execTimeQuickPivoMeio, "Quicksort Pivo Meio");
         delete sorter;
         break;
     }
     case 1:
     {
-        QuickSort *recursiveSorter = new QuickSort(conjunto, linhasParaLer);
-        Dados *auxQuickRecursivo;
-        clock_t execTimeQuickRecursivo;
-        std::tie(auxQuickRecursivo, execTimeQuickRecursivo) = recursiveSorter->sort("recursivo");
-        imprimirConjunto(auxQuickRecursivo, linhasParaLer, execTimeQuickRecursivo, "Quicksort recursivo");
-        delete recursiveSorter;
+        QuickSort *pivoMedianaSorter = new QuickSort(conjunto, linhasParaLer);
+        Dados *auxQuickPivoMediana;
+        clock_t execTimeQuickPivoMediana;
+        std::tie(auxQuickPivoMediana, execTimeQuickPivoMediana) = pivoMedianaSorter->sort("pivo_mediana");
+        imprimirConjunto(auxQuickPivoMediana, linhasParaLer, execTimeQuickPivoMediana, "Quicksort Pivo Mediana");
+        delete pivoMedianaSorter;
         break;
     }
     case 2:
