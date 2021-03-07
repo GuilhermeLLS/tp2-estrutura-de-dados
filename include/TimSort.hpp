@@ -13,7 +13,7 @@ public:
   std::tuple<Dados*, clock_t> sort();
 
 protected:
-  void timSort(Dados *conjunto, int n);
+  void timSort(Dados *conjunto, int tamanho);
 
 private:
   Dados *conjuntoClasse;

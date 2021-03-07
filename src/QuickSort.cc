@@ -1,25 +1,25 @@
 #include "../include/Dados.hpp"
 #include "../include/QuickSort.hpp"
 
-QuickSort::QuickSort(Dados conjunto[], int size)
+QuickSort::QuickSort(Dados *conjunto, int size)
 {
     this->conjuntoClasse = conjunto;
     this->size = size;
 }
 
-std::tuple<Dados *, clock_t> QuickSort::sort(std::string type)
+std::tuple<Dados *, clock_t> QuickSort::sort(std::string tipo)
 {
     clock_t time;
-    if (type == "iterativo")
+    if (tipo == "pivo_mediana")
     {
         time = clock();
-        this->quickSortIterative(this->conjuntoClasse, 0, this->size - 1);
+        quickSortMediana(this->conjuntoClasse, 0, this->size - 1);
         time = clock() - time;
     }
-    else if (type == "recursivo")
+    else if (tipo == "pivo_meio")
     {
         time = clock();
-        this->quickSort(this->conjuntoClasse, 0, this->size - 1);
+        quickSort(this->conjuntoClasse, 0, this->size - 1);
         time = clock() - time;
     }
     else
@@ -29,77 +29,99 @@ std::tuple<Dados *, clock_t> QuickSort::sort(std::string type)
     return {this->conjuntoClasse, time};
 }
 
-int QuickSort::partition(Dados *conjunto, int low, int high)
+void QuickSort::partition(Dados *conjunto, int esquerda, int direita, int *indiceEsquerda, int *indiceDireita)
 {
-    Dados aux;
-    Dados pivo = conjunto[high / 2];
-    int indiceMenor = low;
-
-    for (int i = low; i < high; i++)
+    Dados pivo, aux;
+    *indiceEsquerda = esquerda;
+    *indiceDireita = direita;
+    pivo = conjunto[(*indiceEsquerda + *indiceDireita) / 2];
+    while (*indiceEsquerda <= *indiceDireita)
     {
-        if (conjunto[i].distancia <= pivo.distancia)
+        while (pivo.distancia > conjunto[*indiceEsquerda].distancia)
         {
-            aux = conjunto[i];
-            conjunto[i] = conjunto[indiceMenor];
-            conjunto[indiceMenor] = aux;
-            indiceMenor++;
+            (*indiceEsquerda)++;
         }
-    }
-
-    aux = conjunto[high];
-    conjunto[high] = conjunto[indiceMenor];
-    conjunto[indiceMenor] = aux;
-
-    return indiceMenor;
+        while (pivo.distancia < conjunto[*indiceDireita].distancia)
+        {
+            (*indiceDireita)--;
+        }
+        if (*indiceEsquerda <= *indiceDireita)
+        {
+            aux = conjunto[*indiceEsquerda];
+            conjunto[*indiceEsquerda] = conjunto[*indiceDireita];
+            conjunto[*indiceDireita] = aux;
+            (*indiceEsquerda)++;
+            (*indiceDireita)--;
+        }
+    };
 }
 
-void QuickSort::quickSort(Dados *conjunto, int low, int high)
+void QuickSort::quickSort(Dados *dados, int esquerda, int direita)
 {
-    if (low < high)
+    int i, j;
+    partition(dados, esquerda, direita, &i, &j);
+    if (esquerda < j)
     {
-        int indiceParticionamento = this->partition(conjunto, low, high);
-        this->quickSort(conjunto, low, indiceParticionamento - 1);
-        this->quickSort(conjunto, indiceParticionamento + 1, high);
+        quickSort(dados, esquerda, j);
+    }
+    if (i < direita)
+    {
+        quickSort(dados, i, direita);
     }
 }
 
-void QuickSort::quickSortIterative(Dados *conjunto, int low, int high)
+int QuickSort::achaPivo(Dados *conjunto, int esq, int dir)
 {
-    // Create an auxiliary stack
-    int stack[high - low + 1];
+    Dados elemEsq = conjunto[esq];
+    Dados elemMeio = conjunto[(esq + dir) / 2];
+    Dados elemDir = conjunto[dir];
 
-    // initialize top of stack
-    int top = -1;
+    if ((elemMeio.distancia < elemDir.distancia && elemMeio.distancia > elemEsq.distancia) || (elemMeio.distancia > elemDir.distancia && elemMeio.distancia < elemEsq.distancia))
+        return (esq + dir) / 2;
+    if ((elemEsq.distancia < elemMeio.distancia && elemEsq.distancia > elemDir.distancia) || (elemEsq.distancia > elemMeio.distancia && elemEsq.distancia < elemDir.distancia))
+        return esq;
+    if ((elemDir.distancia > elemMeio.distancia && elemDir.distancia < elemEsq.distancia) || (elemDir.distancia < elemMeio.distancia && elemDir.distancia > elemEsq.distancia))
+        return dir;
+    return (esq + dir) / 2;
+}
 
-    // push initial values of l and h to stack
-    stack[++top] = low;
-    stack[++top] = high;
-
-    // Keep popping from stack while is not empty
-    while (top >= 0)
+void QuickSort::partitionMediana(Dados *conjunto, int esquerda, int direita, int *indiceEsquerda, int *indiceDireita)
+{
+    Dados pivo, aux;
+    *indiceEsquerda = esquerda;
+    *indiceDireita = direita;
+    pivo = conjunto[achaPivo(conjunto, esquerda, direita)];
+    while (*indiceEsquerda <= *indiceDireita)
     {
-        // Pop h and l
-        high = stack[top--];
-        low = stack[top--];
-
-        // Set pivot element at its correct position
-        // in sorted array
-        int p = partition(conjunto, low, high);
-
-        // If there are elements on left side of pivot,
-        // then push left side to stack
-        if (p - 1 > low)
+        while (pivo.distancia > conjunto[*indiceEsquerda].distancia)
         {
-            stack[++top] = low;
-            stack[++top] = p - 1;
+            (*indiceEsquerda)++;
         }
-
-        // If there are elements on right side of pivot,
-        // then push right side to stack
-        if (p + 1 < high)
+        while (pivo.distancia < conjunto[*indiceDireita].distancia)
         {
-            stack[++top] = p + 1;
-            stack[++top] = high;
+            (*indiceDireita)--;
         }
+        if (*indiceEsquerda <= *indiceDireita)
+        {
+            aux = conjunto[*indiceEsquerda];
+            conjunto[*indiceEsquerda] = conjunto[*indiceDireita];
+            conjunto[*indiceDireita] = aux;
+            (*indiceEsquerda)++;
+            (*indiceDireita)--;
+        }
+    };
+}
+
+void QuickSort::quickSortMediana(Dados *dados, int esquerda, int direita)
+{
+    int i, j;
+    partitionMediana(dados, esquerda, direita, &i, &j);
+    if (esquerda < j)
+    {
+        quickSortMediana(dados, esquerda, j);
+    }
+    if (i < direita)
+    {
+        quickSortMediana(dados, i, direita);
     }
 }

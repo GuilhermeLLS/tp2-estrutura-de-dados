@@ -1,17 +1,16 @@
 #include "../include/Dados.hpp"
 #include "../include/MergeSort.hpp"
-#include "../include/InsertionSort.hpp"
 #include "../include/TimSort.hpp"
 
 const int RUN = 256;
 
-void insertionSort(Dados conjunto[], int left, int right)
+void insertionSort(Dados conjunto[], int esquerda, int direita)
 {
-    for (int i = left + 1; i <= right; i++)
+    for (int i = esquerda + 1; i <= direita; i++)
     {
         Dados temp = conjunto[i];
         int j = i - 1;
-        while (j >= left && conjunto[j].distancia > temp.distancia)
+        while (j >= esquerda && conjunto[j].distancia > temp.distancia)
         {
             conjunto[j + 1] = conjunto[j];
             j--;
@@ -38,47 +37,29 @@ void TimSort::timSort(Dados *conjunto, int size)
 {
     MergeSort mergeSorter = MergeSort(conjunto, size);
 
-    // Sort individual subarrays of size RUN
     for (int i = 0; i < size; i += RUN)
         insertionSort(conjunto, i, std::min((i + 31), (size - 1)));
 
-    // Start merging from size RUN (or 32).
-    // It will merge
-    // to form size 64, then 128, 256
-    // and so on ....
     for (int chunkSize = RUN; chunkSize < size;
          chunkSize = 2 * chunkSize)
     {
 
-        // pick starting point of
-        // left sub array. We
-        // are going to merge
-        // arr[left..left+chunkSize-1]
-        // and arr[left+chunkSize, left+2*chunkSize-1]
-        // After every merge, we
-        // increase left by 2*chunkSize
-        for (int left = 0; left < size;
-             left += 2 * chunkSize)
+        for (int esquerda = 0; esquerda < size;
+             esquerda += 2 * chunkSize)
         {
 
-            // find ending point of
-            // left sub array
-            // mid+1 is starting point
-            // of right sub array
-            // std::cout << "chunkSize " << chunkSize << std::endl;
-            int mid = left + chunkSize - 1;
-            int right = std::min((left + 2 * chunkSize - 1),
+            int meio = esquerda + chunkSize - 1;
+            int direita = std::min((esquerda + 2 * chunkSize - 1),
                                  (size - 1));
             
-            if (mid >= right) {
-                int diff = mid - right;
-                int avg = (right - left) / 2;
-                mid = mid - diff - avg;
+            // checa se ocorre um out of bounds error (meio >= direita) => isso implica que meio > tamanho do array
+            if (meio >= direita) {
+                int diff = meio - direita;
+                int avg = (direita - esquerda) / 2;
+                meio = meio - diff - avg;
             }
 
-            // merge sub array arr[left.....mid] &
-            // arr[mid+1....right]
-            mergeSorter.merge(conjunto, left, mid, right);
+            mergeSorter.merge(conjunto, esquerda, meio, direita);
         }
     }
 }
