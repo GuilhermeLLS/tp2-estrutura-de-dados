@@ -13,8 +13,8 @@ public:
     std::tuple<Dados *, clock_t> sort();
 
 protected:
-    void merge(Dados *conjunto, int left, int middle, int right);
-    void mergeSort(Dados *conjunto, int left, int right);
+    void merge(Dados *conjunto, int esquerda, int meio, int direita);
+    void mergeSort(Dados *conjunto, int esquerda, int direita);
 
 private:
     Dados *conjuntoClasse;

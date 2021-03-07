@@ -9,13 +9,16 @@
 class QuickSort
 {
 public:
-    QuickSort(Dados conjunto[], int size);
-    std::tuple<Dados*, clock_t> sort(std::string type);
+    QuickSort(Dados *conjunto, int size);
+    std::tuple<Dados *, clock_t> sort(std::string tipo);
 
 protected:
-    int partition(Dados conjunto[], int low, int high);
-    void quickSort(Dados conjunto[], int low, int high);
-    void quickSortIterative(Dados conjunto[], int low, int high);
+    void troca(Dados *troca1, Dados *troca2);
+    void partitionRecursive(Dados *conjunto, int esquerda, int direita, int *i, int *j);
+    int partitionIterative(Dados *conjunto, int esquerda, int direita);
+    void quickSortRecursive(Dados *conjunto, int esquerda, int direita);
+    void quickSortIterative(Dados *conjunto, int esquerda, int direita);
+
 private:
     Dados *conjuntoClasse;
     int size;

@@ -1,25 +1,58 @@
 #include "../include/Dados.hpp"
 #include "../include/QuickSort.hpp"
 
-QuickSort::QuickSort(Dados conjunto[], int size)
+QuickSort::QuickSort(Dados *conjunto, int size)
 {
     this->conjuntoClasse = conjunto;
     this->size = size;
 }
 
-std::tuple<Dados *, clock_t> QuickSort::sort(std::string type)
+void QuickSort::partitionRecursive(Dados *planeta, int esquerda, int direita, int *i, int *j)
+{
+    Dados x, w;
+    *i = esquerda;
+    *j = direita;
+    x = planeta[(*i + *j) / 2];
+    do
+    {
+        while (x.distancia > planeta[*i].distancia)
+            (*i)++;
+        while (x.distancia < planeta[*j].distancia)
+            (*j)--;
+        if (*i <= *j)
+        {
+            w = planeta[*i];
+            planeta[*i] = planeta[*j];
+            planeta[*j] = w;
+            (*i)++;
+            (*j)--;
+        }
+    } while (*i <= *j);
+}
+
+void QuickSort::quickSortRecursive(Dados *dados, int esquerda, int direita)
+{
+    int i, j;
+    partitionRecursive(dados, esquerda, direita, &i, &j);
+    if (esquerda < j)
+        quickSortRecursive(dados, esquerda, j);
+    if (i < direita)
+        quickSortRecursive(dados, i, direita);
+}
+
+std::tuple<Dados *, clock_t> QuickSort::sort(std::string tipo)
 {
     clock_t time;
-    if (type == "iterativo")
+    if (tipo == "iterativo")
     {
         time = clock();
         this->quickSortIterative(this->conjuntoClasse, 0, this->size - 1);
         time = clock() - time;
     }
-    else if (type == "recursivo")
+    else if (tipo == "recursivo")
     {
         time = clock();
-        this->quickSort(this->conjuntoClasse, 0, this->size - 1);
+        quickSortRecursive(this->conjuntoClasse, 0, this->size - 1);
         time = clock() - time;
     }
     else
@@ -29,77 +62,67 @@ std::tuple<Dados *, clock_t> QuickSort::sort(std::string type)
     return {this->conjuntoClasse, time};
 }
 
-int QuickSort::partition(Dados *conjunto, int low, int high)
+void QuickSort::troca(Dados *troca1, Dados *troca2)
 {
-    Dados aux;
-    Dados pivo = conjunto[high / 2];
-    int indiceMenor = low;
-
-    for (int i = low; i < high; i++)
-    {
-        if (conjunto[i].distancia <= pivo.distancia)
-        {
-            aux = conjunto[i];
-            conjunto[i] = conjunto[indiceMenor];
-            conjunto[indiceMenor] = aux;
-            indiceMenor++;
-        }
-    }
-
-    aux = conjunto[high];
-    conjunto[high] = conjunto[indiceMenor];
-    conjunto[indiceMenor] = aux;
-
-    return indiceMenor;
+    Dados aux = *troca1;
+    *troca1 = *troca2;
+    *troca2 = aux;
 }
 
-void QuickSort::quickSort(Dados *conjunto, int low, int high)
+int QuickSort::partitionIterative(Dados *conjunto, int esquerda, int direita)
 {
-    if (low < high)
+    Dados pivo = conjunto[direita / 2];
+    int i = (esquerda - 1);
+
+    for (int j = esquerda; j < direita; j++)
     {
-        int indiceParticionamento = this->partition(conjunto, low, high);
-        this->quickSort(conjunto, low, indiceParticionamento - 1);
-        this->quickSort(conjunto, indiceParticionamento + 1, high);
+        if (conjunto[j].distancia <= pivo.distancia)
+        {
+            i++;
+            troca(&conjunto[i], &conjunto[j]);
+        }
     }
+    troca(&conjunto[i + 1], &conjunto[direita]);
+    return (i + 1);
 }
 
-void QuickSort::quickSortIterative(Dados *conjunto, int low, int high)
+// void QuickSort::quickSort(Dados *conjunto, int esquerda, int direita)
+// {
+//     if (esquerda < direita)
+//     {
+//         int indiceParticionamento = partition(conjunto, esquerda, direita);
+//         quickSort(conjunto, esquerda, indiceParticionamento - 1);
+//         quickSort(conjunto, indiceParticionamento + 1, direita);
+//     }
+// }
+
+void QuickSort::quickSortIterative(Dados *conjunto, int esquerda, int direita)
 {
-    // Create an auxiliary stack
-    int stack[high - low + 1];
+    int *pilha = new int[direita - esquerda + 1];
 
-    // initialize top of stack
-    int top = -1;
+    int topo = -1;
 
-    // push initial values of l and h to stack
-    stack[++top] = low;
-    stack[++top] = high;
+    pilha[++topo] = esquerda;
+    pilha[++topo] = direita;
 
-    // Keep popping from stack while is not empty
-    while (top >= 0)
+    while (topo >= 0)
     {
-        // Pop h and l
-        high = stack[top--];
-        low = stack[top--];
+        direita = pilha[topo--];
+        esquerda = pilha[topo--];
 
-        // Set pivot element at its correct position
-        // in sorted array
-        int p = partition(conjunto, low, high);
+        int pivo = partitionIterative(conjunto, esquerda, direita);
 
-        // If there are elements on left side of pivot,
-        // then push left side to stack
-        if (p - 1 > low)
+        if (pivo - 1 > esquerda)
         {
-            stack[++top] = low;
-            stack[++top] = p - 1;
+            pilha[++topo] = esquerda;
+            pilha[++topo] = pivo - 1;
         }
 
-        // If there are elements on right side of pivot,
-        // then push right side to stack
-        if (p + 1 < high)
+        if (pivo + 1 < direita)
         {
-            stack[++top] = p + 1;
-            stack[++top] = high;
+            pilha[++topo] = pivo + 1;
+            pilha[++topo] = direita;
         }
     }
+    free(pilha);
 }

@@ -17,21 +17,18 @@ std::tuple<Dados *, clock_t> InsertionSort::sort()
 
 void InsertionSort::insertionSort(Dados *conjunto, int size)
 {
-    Dados key;
+    Dados aux;
     int i, j;
     for (i = 1; i < size; i++)
     {
-        key = conjunto[i];
+        aux = conjunto[i];
         j = i - 1;
 
-        /* Move elements of conjunto[0..i-1], that are 
-        greater than key, to one position ahead 
-        of their current position */
-        while (j >= 0 && conjunto[j].distancia > key.distancia)
+        while (j >= 0 && conjunto[j].distancia > aux.distancia)
         {
             conjunto[j + 1] = conjunto[j];
             j = j - 1;
         }
-        conjunto[j + 1] = key;
+        conjunto[j + 1] = aux;
     }
 }
