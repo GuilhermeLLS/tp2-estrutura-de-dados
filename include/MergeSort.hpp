@@ -20,8 +20,7 @@ private:
     Dados *conjuntoClasse;
     int size;
 
-friend class TimSort;
+    friend class TimSort;
 };
-
 
 #endif

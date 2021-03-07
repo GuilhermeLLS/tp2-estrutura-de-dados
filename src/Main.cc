@@ -6,6 +6,7 @@
 #include "../include/QuickSort.hpp"
 #include "../include/InsertionSort.hpp"
 #include "../include/MergeSort.hpp"
+#include "../include/TimSort.hpp"
 
 void imprimirConjunto(Dados *conjunto, int tamanho, clock_t execTime, std::string algoType)
 {
@@ -13,7 +14,7 @@ void imprimirConjunto(Dados *conjunto, int tamanho, clock_t execTime, std::strin
     std::cout << algoType << ":" << std::endl;
     // for (int i = 0; i < tamanho; i++)
     // {
-    // std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
+        // std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << std::endl;
     // }
     std::cout << "Execution time: " << ((double)execTime) / ((CLOCKS_PER_SEC / 1000)) << "ms" << std::endl;
 }
@@ -43,28 +44,34 @@ int main(int argc, char *argv[])
         i--;
     }
 
-    QuickSort sorter = QuickSort(conjunto, linhasParaLer);
-    Dados *auxQuickIterativo;
-    clock_t execTimeQuickIterativo;
-    std::tie(auxQuickIterativo, execTimeQuickIterativo) = sorter.sort("iterativo");
-    imprimirConjunto(auxQuickIterativo, linhasParaLer, execTimeQuickIterativo, "Quicksort iterativo");
+    // QuickSort sorter = QuickSort(conjunto, linhasParaLer);
+    // Dados *auxQuickIterativo;
+    // clock_t execTimeQuickIterativo;
+    // std::tie(auxQuickIterativo, execTimeQuickIterativo) = sorter.sort("iterativo");
+    // imprimirConjunto(auxQuickIterativo, linhasParaLer, execTimeQuickIterativo, "Quicksort iterativo");
 
-    Dados *auxQuickRecursivo;
-    clock_t execTimeQuickRecursivo;
-    std::tie(auxQuickRecursivo, execTimeQuickRecursivo) = sorter.sort("recursivo");
-    imprimirConjunto(auxQuickRecursivo, linhasParaLer, execTimeQuickRecursivo, "Quicksort recursivo");
+    // Dados *auxQuickRecursivo;
+    // clock_t execTimeQuickRecursivo;
+    // std::tie(auxQuickRecursivo, execTimeQuickRecursivo) = sorter.sort("recursivo");
+    // imprimirConjunto(auxQuickRecursivo, linhasParaLer, execTimeQuickRecursivo, "Quicksort recursivo");
 
-    InsertionSort inSorter = InsertionSort(conjunto, linhasParaLer);
-    Dados *auxIns;
-    clock_t execTimeInsertion;
-    std::tie(auxIns, execTimeInsertion) = inSorter.sort();
-    imprimirConjunto(auxIns, linhasParaLer, execTimeInsertion, "InsertionSort");
+    // InsertionSort inSorter = InsertionSort(conjunto, linhasParaLer);
+    // Dados *auxIns;
+    // clock_t execTimeInsertion;
+    // std::tie(auxIns, execTimeInsertion) = inSorter.sort();
+    // imprimirConjunto(auxIns, linhasParaLer, execTimeInsertion, "InsertionSort");
 
-    MergeSort mergSorter = MergeSort(conjunto, linhasParaLer);
-    Dados *auxMergeSort;
-    clock_t execTimeMerge;
-    std::tie(auxMergeSort, execTimeMerge) = mergSorter.sort();
-    imprimirConjunto(auxMergeSort, linhasParaLer, execTimeMerge, "MergeSort");
+    // MergeSort mergSorter = MergeSort(conjunto, linhasParaLer);
+    // Dados *auxMergeSort;
+    // clock_t execTimeMerge;
+    // std::tie(auxMergeSort, execTimeMerge) = mergSorter.sort();
+    // imprimirConjunto(auxMergeSort, linhasParaLer, execTimeMerge, "MergeSort");
 
+    TimSort *timSorter = new TimSort(conjunto, linhasParaLer);
+    Dados *auxTimSort;
+    clock_t execTimeTim;
+    std::tie(auxTimSort, execTimeTim) = timSorter->sort();
+    imprimirConjunto(auxTimSort, linhasParaLer, execTimeTim, "TimSort");
+    delete timSorter;
     return 0;
 }

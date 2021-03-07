@@ -4,18 +4,20 @@
 #include <iostream>
 #include <time.h>
 #include <tuple>
-#include "Dados.hpp"
-#include "MergeSort.hpp"
-#include "InsertionSort.hpp"
+#include <bits/stdc++.h> 
 
-class TimSort {
-  public:
-    TimSort(Dados *conjunto, int size);
-    std::tuple<Dados*, clock_t> sort();
-  
-  protected:
-    timSort(Dados *conjunto, int n);
-    
-}
+class TimSort
+{
+public:
+  TimSort(Dados *conjunto, int size);
+  std::tuple<Dados*, clock_t> sort();
+
+protected:
+  void timSort(Dados *conjunto, int n);
+
+private:
+  Dados *conjuntoClasse;
+  int size;
+};
 
 #endif
