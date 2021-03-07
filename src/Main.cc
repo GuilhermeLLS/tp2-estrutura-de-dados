@@ -14,7 +14,6 @@ void imprimirConjunto(Dados *conjunto, int tamanho, clock_t execTime, std::strin
     std::ofstream saida("saida.txt", std::ofstream::in);
     for (int i = tamanho - 1; i > 0; i--)
     {
-        std::cout << conjunto[i].nome << ", " << conjunto[i].distancia << "\n";
         saida << conjunto[i].nome << ", " << conjunto[i].distancia << "\n";
     }
     saida.close();
